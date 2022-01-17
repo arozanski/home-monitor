@@ -9,7 +9,7 @@ const pool = new Pool({
 
 const init = () => {
   const app = express();
-  console.log("process", process.env);
+
   app.get("/", async (req, res) => {
     const dbClient = await pool.connect();
 

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Armand Rozanski",
@@ -11,6 +12,7 @@
   "dependencies": {
     "dotenv": "^14.1.0",
     "express": "^4.17.2",
+    "nodemon": "^2.0.15",
     "pg": "^8.7.1"
   }
 }
