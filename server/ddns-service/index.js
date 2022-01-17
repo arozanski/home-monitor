@@ -1,7 +1,9 @@
-import express from "express";
 import pkg from "pg";
 import dotenv from "dotenv";
 import publicIp from "public-ip";
+
+import { GET_IP, SET_IP } from "./db-queries.js";
+import { REFRESH_INTERVAL } from "./constants.js";
 
 // get env config
 dotenv.config();
@@ -10,41 +12,45 @@ const pool = new pkg.Pool({
   connectionString: `postgresql://postgres:${process.env.POSTGRES_PASS}@localhost:5432/home-monitor`,
 });
 
-const init = async () => {
-  const app = express();
-  const ipv4 = await publicIp.v4();
-  console.log(`[DDNS] public IPv4: ${ipv4}`);
+const app = async () => {
+  const ip = await publicIp.v4();
+  console.log(`[DDNS] Public IPv4: ${ip}`);
 
-  app.get("/", async (req, res) => {
+  setInterval(async () => {
     const dbClient = await pool.connect();
 
     try {
-      const ipAddress = await dbClient.query(
-        "SELECT * FROM public.ddns_ip FETCH FIRST ROW ONLY"
-      );
+      let ipAddressQueryResult;
 
-      res
-        .json({
-          status: "OK",
-          data: ipAddress.rows.pop(),
-        })
-        .end();
+      try {
+        ipAddressQueryResult = await dbClient.query(GET_IP);
+      } catch (e) {
+        console.error(`[DDNS] Unable to get public IP: ${e.message}`);
+        return;
+      }
+
+      const currentIp = ipAddressQueryResult.rows[0]?.ddns_ip;
+      const iP_id = ipAddressQueryResult.rows[0]?.ddns_id;
+
+      if (ip && currentIp !== ip) {
+        console.log("[DDNS] Setting new IP:", ip, new Date(), iP_id);
+        try {
+          await dbClient.query(SET_IP, [ip, new Date(), iP_id]);
+          console.error("[DDNS] Update success!");
+        } catch (e) {
+          console.error(`[DDNS] Failed to update: ${e.message}`);
+        }
+      } else {
+        console.log("[DDNS] No update, IP is up to date");
+      }
     } catch (e) {
       console.error(`[DDNS] DB error: ${e.message}`);
-      res
-        .json({
-          status: `DB error: ${e.message}`,
-        })
-        .end();
     }
 
     await dbClient.end();
-  });
+  }, REFRESH_INTERVAL);
 
-  const PORT = 3010;
-  app.listen(PORT);
-
-  console.log(`[DDNS] App running on http://localhost:${PORT}`);
+  console.log("[DDNS] App is running");
 };
 
-init();
+app();
