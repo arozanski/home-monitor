@@ -1,14 +1,19 @@
-const express = require("express");
-const { Pool } = require("pg");
+import express from "express";
+import pkg from "pg";
+import dotenv from "dotenv";
+import publicIp from "public-ip";
 
-require("dotenv").config();
+// get env config
+dotenv.config();
 
-const pool = new Pool({
+const pool = new pkg.Pool({
   connectionString: `postgresql://postgres:${process.env.POSTGRES_PASS}@localhost:5432/home-monitor`,
 });
 
-const init = () => {
+const init = async () => {
   const app = express();
+  const ipv4 = await publicIp.v4();
+  console.log(`[DDNS] public IPv4: ${ipv4}`);
 
   app.get("/", async (req, res) => {
     const dbClient = await pool.connect();
