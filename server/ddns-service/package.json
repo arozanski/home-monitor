@@ -9,6 +9,8 @@
   "author": "Armand Rozanski",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.2"
+    "dotenv": "^14.1.0",
+    "express": "^4.17.2",
+    "pg": "^8.7.1"
   }
 }

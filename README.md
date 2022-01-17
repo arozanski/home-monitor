@@ -9,12 +9,23 @@
 
 ## Config
 
+### DDNS - create `.env` file in service root and update the `secrets`:
+
+```
+POSTGRES_PASS = "dummy password";
+```
+
 ### Ports:
 
 Client:
 
 - Web `3000`
-  Server:
+
+Server:
 
 - DDNS `3010`
 - App `3020`
+
+Database:
+
+- postgress `5432`
