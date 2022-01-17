@@ -4,7 +4,7 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const pool = new Pool({
-  connectionString: `postgresql://postgres:${process.env.PROGRESS_PASS}@localhost:5432/home-monitor`,
+  connectionString: `postgresql://postgres:${process.env.POSTGRES_PASS}@localhost:5432/home-monitor`,
 });
 
 const init = () => {
@@ -14,12 +14,14 @@ const init = () => {
     const dbClient = await pool.connect();
 
     try {
-      const ipAddress = await dbClient.query("SELECT * FROM public.ddns_ip");
+      const ipAddress = await dbClient.query(
+        "SELECT * FROM public.ddns_ip FETCH FIRST ROW ONLY"
+      );
 
       res
         .json({
           status: "OK",
-          data: ipAddress.rows[0],
+          data: ipAddress.rows.pop(),
         })
         .end();
     } catch (e) {
