@@ -23,8 +23,7 @@ Client:
 
 Server:
 
-- DDNS `3010`
-- App `3020`
+- App `3010`
 
 Database:
 
