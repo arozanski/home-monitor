@@ -65,5 +65,6 @@ const syncIP = async (ip) => {
     return res;
   } catch (e) {
     error(`[DDNS] Google sync failed: ${e.message}`);
+    return "sync error";
   }
 };
