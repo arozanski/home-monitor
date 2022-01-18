@@ -59,7 +59,7 @@ export const updateIP = async () => {
 const syncIP = async (ip) => {
   try {
     const res = await axios.post(
-      `https://${process.env.GOOGLE_DOMAIN_USERNAME}:${process.env.GOOGLE_DOMAIN_PASSWORD}@domains.google.com/nic/update?hostname=mr.arozanski.dev&myip=${ip}`
+      `https://${process.env.GOOGLE_DOMAIN_USERNAME}:${process.env.GOOGLE_DOMAIN_PASSWORD}@domains.google.com/nic/update?hostname=${process.env.GOOGLE_DOMAIN_NAME}&myip=${ip}`
     );
     log(`[DDNS] Google sync succeed!`);
     return res;
