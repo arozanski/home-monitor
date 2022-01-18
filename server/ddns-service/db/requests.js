@@ -27,7 +27,10 @@ export const updateIP = async () => {
 
     const currentIp = ipAddressQueryResult.rows[0]?.ddns_ip;
     const ip_id = ipAddressQueryResult.rows[0]?.ddns_id;
+
+    //uncomment below line if you want to trigger DB update to reset IP entry
     //await dbClient.query(SET_IP, ["0.0.0.0", new Date(), ip_id]);
+
     if (ip && currentIp !== ip) {
       log(`[DDNS] Setting new IP:${ip} with id ${ip_id} into DB`);
       try {
