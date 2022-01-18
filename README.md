@@ -2,14 +2,19 @@
 
 ## What is it?
 
+too lazy to explain this atm.
+
 ## Tech stack
 
-- Client: ReactJS/TypeScript, Redux (state), Styled Components + Material UI
-- Server: DDNS Service - Node.js
+- Client: ReactJS/TypeScript, Redux (state), Styled Components + Material UI - Web dashboard displaying all fancy stuff
+- Database: PostgreSQL
+- Server: DDNS Service - Node.js - this little service is using Google DDNS service to keep track of the server public IP changing now and then. It is stored in DB for future reference and to avoid unnecessary updates to Google DDNS.
 
 ## Config
 
-### DDNS - create `.env` file in service root and update the `secrets`:
+### DDNS
+
+- create `.env` file in the service root and update the `secrets`:
 
 ```
 POSTGRES_PASS = dummy password;
@@ -30,4 +35,4 @@ Server:
 
 Database:
 
-- postgress `5432`
+- Postgres DB `5432`
