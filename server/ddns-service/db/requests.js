@@ -24,12 +24,12 @@ export const updateIP = async () => {
     const ip_id = ipAddressQueryResult.rows[0]?.ddns_id;
 
     if (ip && currentIp !== ip) {
-      log(`[DDNS] Setting new IP:${ip} with id ${ip_id}`);
+      log(`[DDNS] Setting new IP:${ip} with id ${ip_id} into DB`);
       try {
         await dbClient.query(SET_IP, [ip, new Date(), ip_id]);
-        log("[DDNS] Update success!");
+        log("[DDNS] DB IP update success!");
       } catch (e) {
-        error(`[DDNS] Failed to update: ${e.message}`);
+        error(`[DDNS] Failed to update IP: ${e.message}`);
       }
     } else {
       log("[DDNS] No update, IP is up to date");
@@ -40,3 +40,5 @@ export const updateIP = async () => {
 
   await dbClient.end();
 };
+
+const syncIP = (ip) => {};
